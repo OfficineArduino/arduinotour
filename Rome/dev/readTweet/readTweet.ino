@@ -1,40 +1,19 @@
 /*
-  Tweet Your Music
-  (Internet -> Actuators)
-  
-  Developed by  Marta / Roberta / Simone / Silvano during 
   Arduinotour 2012 @ Rome 
   
-  Sounds & Lights based on a tweet by user / hashtag
-  Speaker & RGB led (piranha).
+  Basic example of Twitter client, both for WIFI and Ethernet, by pitusso  
   
-  Tone library
-  http://code.google.com/p/rogue-code/downloads/detail?name=Arduino-Library-Tone.zip&can=2&q=
-    updated to work with 1.0.1 Arduino IDE : simply replace in Tone/Tone.cpp 
-    #include <wiring.h> 
-    with
-    #include <Arduino.h>
-  Wifi shield Arduino library
+  Twitter library:
+  http://arduino.cc/playground/Code/TwitterLibrary
+  updated following this post:
+  http://arduino.cc/forum/index.php?topic=121483.0
+  Wifi shield Arduino library:
   http://arduino.cc/en/uploads/Main/WiFiShield_library.zip
-  
 */
 
-#include <Tone.h>
 #include <SPI.h>
 //#include <WiFi.h>
 #include <Ethernet.h>
-
-const int MAX_NOTES = 22;
-int notes[MAX_NOTES];
-int duration[MAX_NOTES];
-
-int ledR = 3;
-int ledG = 6;
-int ledB = 5;
-
-int speaker = 9;
-
-Tone tone1;
 
 //wired
 byte mac[] = {  
@@ -47,8 +26,9 @@ char ssid[] = "ssid"; //  your network SSID (name)
 char pass[] = "pwd";    // your network password (use for WPA, or use as key for WEP)
 int status = WL_IDLE_STATUS; // status of the wifi connection
 WiFiClient client; // initialize the library instance:
-int keyIndex = 0;            // your network key Index number (needed only for WEP)
 */
+
+int keyIndex = 0;            // your network key Index number (needed only for WEP)
 
 const unsigned long requestInterval = 30*1000;    // delay between requests; 30 seconds
 
@@ -69,23 +49,9 @@ String stringTwo = "";
 int index = 0;
 
 void setup() {
-  
-  Serial.begin(9600);  
-  tone1.begin(9);
-  
-  pinMode(ledR, OUTPUT);
-  pinMode(ledG, OUTPUT);
-  pinMode(ledB, OUTPUT);
-  
-  pinMode(speaker, OUTPUT);
-  
-  //inizializzazione array
-  emptyArray();
-  
   // reserve space for the strings:
   currentLine.reserve(256);
   tweet.reserve(150);
-
   //Initialize serial and wait for port to open:
   Serial.begin(9600); 
   while (!Serial) {
@@ -111,8 +77,6 @@ void setup() {
     // wait 10 seconds for connection:
     delay(10000);
   } 
-  
-  printWifiStatus(); //wireless
 //</WIRELESS>  
 */
 
@@ -124,10 +88,11 @@ void setup() {
     for(;;)
       ;
   }
-
-  printWiredStatus();
 //</WIRED>
 
+  // you're connected now, so print out the status:
+  //printWifiStatus(); //wireless
+  printWiredStatus(); //wired
   connectToServer();
 }
 
@@ -159,54 +124,41 @@ void loop()
       if (readingTweet) {
         if (inChar != '<') {
           tweet += inChar;
-        } else {
+        } 
+        else {
           // if you got a "<" character,
           // you've reached the end of the tweet:
           readingTweet = false;
-          Serial.println(tweet);  
-         
-         //String tweet="#tym C=1000,E=500,F=1400,C=500,C=1000,E=1000,C=1000,C=1000,C=1000,F=1000,C=1000,G=1000,C=1000,D=1000,C=1000,A=1000,C=1000,E=1000,i=2"; //test string
-          String subtweet = "";
-  
-          int notesIndex = 0;
-          int assPos = tweet.indexOf("=");
-          String tmpStr = "";
-          char tmpStrChar[5];
+          Serial.println(tweet);   
 
+
+
+          //parsing example
+          int s1Pos = 0;
           int sepPos = 0;
+          String s1Val = "";
+          int s1ValI = 0;
+          char tmpVal[4];
   
-          while (assPos > -1) {
-            sepPos = tweet.indexOf(",", assPos);
-    
-            if (sepPos > -1) {
-
-              tmpStr = tweet.substring(assPos -1, assPos);
-              if (tmpStr == "C") notes[notesIndex] = NOTE_C5;
-              if (tmpStr == "D") notes[notesIndex] = NOTE_D5;
-              if (tmpStr == "E") notes[notesIndex] = NOTE_E5;
-              if (tmpStr == "F") notes[notesIndex] = NOTE_F5;
-              if (tmpStr == "G") notes[notesIndex] = NOTE_G5;
-              if (tmpStr == "A") notes[notesIndex] = NOTE_A5;
-              if (tmpStr == "B") notes[notesIndex] = NOTE_B5;
-      
-              tmpStr = tweet.substring(assPos + 1, sepPos);
-              tmpStr.toCharArray(tmpStrChar, 5);
-              duration[notesIndex] = atoi(tmpStrChar);
-      
-              Serial.print("Saving note: ");
-              Serial.print(notes[notesIndex]);
-              Serial.print(", Duration: ");
-              Serial.println(duration[notesIndex]);
-            }else{
-              break;
-            }
-            assPos = tweet.indexOf("=", sepPos);
-            notesIndex ++;
+          s1Pos = tweet.indexOf("s1=");
+          sepPos = tweet.indexOf(",", s1Pos + 3);
+          s1Val = tweet.substring(s1Pos + 3, sepPos);
+          if (s1Val != "") {
+            s1Val.toCharArray(tmpVal, 4);
+            s1ValI = atoi(tmpVal);
           }  
+          
+          //print value
+          Serial.println(s1ValI);
 
-          //Play your tweet
-          playmusic(); 
-    
+          //operations
+          if (s1ValI > 123) { 
+            digitalWrite(13, HIGH); 
+            //do something 
+          }              
+         
+
+          
           // close the connection to the server:
           client.stop(); 
         }
@@ -214,14 +166,14 @@ void loop()
     }   
   }
   else if (millis() - lastAttemptTime > requestInterval) {
-    // if you're not connected, and <requestInterval> have passed since
+    // if you're not connected, and two minutes have passed since
     // your last connection, then attempt to connect again:
     connectToServer();
   }
 }
 
 void connectToServer() {
-  // attempt to connect:
+  // attempt to connect, and wait a millisecond:
   Serial.println("connecting to server...");
   if (client.connect(server, 80)) {
     Serial.println("making HTTP request...");
@@ -265,72 +217,3 @@ void printWiredStatus() {
     Serial.print("."); 
   }
 }
-
-void playmusic(){
-  
-  for (int i=0; i< MAX_NOTES;i++) {
-    if (notes[i] != 0){
-      if (notes[i] == 523) {
-      //color c
-        analogWrite(ledR, 254);
-        analogWrite(ledG, 0);
-        analogWrite(ledB, 0);
-      } else if (notes[i] == 587) {
-      //color d
-        analogWrite(ledR, 0);
-        analogWrite(ledG, 255);
-        analogWrite(ledB, 0);
-      } else if (notes[i] == 659) {
-      //color e
-        analogWrite(ledR, 0);
-        analogWrite(ledG, 0);
-        analogWrite(ledB, 255);
-      } else if (notes[i] == 698) {
-      //color f
-        analogWrite(ledR, 254);
-        analogWrite(ledG, 255);
-        analogWrite(ledB, 0);
-      } else if (notes[i] == 784) {
-      //color g
-        analogWrite(ledR, 0);
-        analogWrite(ledG, 255);
-        analogWrite(ledB, 255);
-      } else if (notes[i] == 880) {
-      //color a
-        analogWrite(ledR, 254);
-        analogWrite(ledG, 255);
-        analogWrite(ledB, 120);
-      } else if (notes[i] == 988) {
-      //color b
-        analogWrite(ledR, 120);
-        analogWrite(ledG, 100);
-        analogWrite(ledB, 255);
-      }
-
-      tone1.play(notes[i]);
-      
-      Serial.print("Playing note: ");
-      Serial.print(notes[i]);
-      Serial.print(", Duration: ");
-      Serial.println(duration[i]);
-      
-      delay(duration[i]);
-    
-      tone1.stop();
-    }
-    
-    digitalWrite(ledR, HIGH);   // turn the LED off by making the voltage HIGH ()
-    digitalWrite(ledG, HIGH); 
-    digitalWrite(ledB, HIGH); 
-    delay(10); 
-  }
-  emptyArray();
-}
-  
-void emptyArray(){
-  for (int i=0; i< MAX_NOTES;i++) { 
-    notes[i] = 0;
-    duration[i] = 0;  
-  }
-}
-
