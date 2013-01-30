@@ -5,6 +5,8 @@
   Developed by Andrea Amadori / Enrico Bedogni / Riccardo Bianchi /
   Nicola Giacche' / Lucio Gonzalez / Giovanni Vecchet
  
+  Project slides: http://bit.ly/cbg_avv
+ 
   ArduinoTour 2013 @ FabLab / ReggioEmilia
 */  
   
