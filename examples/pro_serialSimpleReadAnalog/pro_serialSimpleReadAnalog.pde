@@ -1,7 +1,9 @@
 import processing.serial.*;
 
 Serial myPort;  // Create object from Serial class
-float val;      // Data received from the serial port
+float potentiometer;      // Data received from the serial port
+int button;
+String longValue = ""; 
 
 void setup() 
 {
@@ -10,7 +12,7 @@ void setup()
   // is always my  FTDI adaptor, so I open Serial.list()[0].
   // On Windows machines, this generally opens COM1.
   // Open whatever port is the one you're using.
-  String portName = Serial.list()[0];
+  String portName = "/dev/ttyACM1"; 
   myPort = new Serial(this, portName, 9600);
   myPort.bufferUntil('\n');
 }
@@ -18,13 +20,32 @@ void setup()
 void draw()
 {
   background(255);             // Set background to white
-  fill(val);                   // set fill to black
+  //fill(val * 255);                   // set fill to black
+  fill(123, button * 255, potentiometer);
+  /*
+  if (val == 1) {
+    fill(255);  
+  } else {
+    fill(0); 
+  }
+  */  
   rect(50, 50, 100, 100);
 }
 
 void serialEvent(Serial p)
 {
-  val = float(myPort.readStringUntil('\n'));
+  longValue = myPort.readString();
+  //longValue.split(";")
+  
+  print(longValue);
+  
+  button = int(longValue.split(";")[0]);
+  potentiometer = float(longValue.split(";")[1]);
+  
+  print(button);
+  print(";");
+  println(potentiometer);
+  //val = float(myPort.readString());
 }
 
 

@@ -2,8 +2,10 @@
   Macchina per avvolgimenti 
   (es. per custom pickup per CGB - Cigar Box Guitar)
   
-  Developed by Andrea Amadori / Enrico Bedogni / Riccardo Bianchi /
+  Project created by 
+  Andrea Amadori / Enrico Bedogni / Riccardo Bianchi /
   Nicola Giacche' / Lucio Gonzalez / Giovanni Vecchet
+  27/01/2013
  
   Project slides: http://bit.ly/cbg_avv
  

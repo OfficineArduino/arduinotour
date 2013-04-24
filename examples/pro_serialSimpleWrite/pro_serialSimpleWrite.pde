@@ -19,7 +19,7 @@ void setup()
   // On Windows machines, this generally opens COM1.
   // Open whatever port is the one you're using.
 //  String portName = Serial.list()[0];
-  String portName = "/dev/ttyUSB1";
+  String portName = "/dev/ttyUSB0";
   myPort = new Serial(this, portName, 9600);
   myPort.bufferUntil('\n');
 }
@@ -28,7 +28,7 @@ void draw() {
   background(255);
   if (mouseOverRect() == true) {  // If mouse is over square,
     fill(204);                    // change color and
-    myPort.write(int(1));              // send an 1 to indicate mouse is over square
+    myPort.write(1);              // send an 1 to indicate mouse is over square
   } 
   else {                        // If mouse is not over square,
     fill(0);                      // change color and
