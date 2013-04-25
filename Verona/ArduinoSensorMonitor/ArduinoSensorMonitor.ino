@@ -43,8 +43,8 @@ float voltage = 0.0;
 //network configuration, WIRED or WIFI
 #ifdef WIFI
 //if using WIFI
-char ssid[] = "htc"; //  your network SSID (name)
-char pass[] = "qwertyuio";    // your network password (use for WPA, or use as key for WEP)
+char ssid[] = "ssid"; //  your network SSID (name)
+char pass[] = "password";    // your network password (use for WPA, or use as key for WEP)
 
 int status = WL_IDLE_STATUS;
 int keyIndex = 0;            // your network key Index number (needed only for WEP)
@@ -79,7 +79,7 @@ int lightValue = 0;
 char server[] = "emoncms.org";     // name address for emoncms.org
 //IPAddress server(213, 138, 101, 177);  // numeric IP for emoncms.org (no DNS)
 
-String apikey = "1cf4342742c4516c9a319052f7b45166";  //api key
+String apikey = "1cf434274........";  //api key
 int node = 0; //if 0, not used per usare più arduino
 
 unsigned long lastConnectionTime = 0;          // last time you connected to the server, in milliseconds

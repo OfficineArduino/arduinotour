@@ -10,6 +10,8 @@
   e inviare dati provenienti da un’uscita analogica (come un lettore 
   di temperatura o di luce). Il dato viene quindi salvato in un 
   database MySql
+  
+  Maggiori informazioni: http://goo.gl/2ZowO
 */
 
 #include <OneWire.h>
