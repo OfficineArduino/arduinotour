@@ -34,7 +34,7 @@ void setup() {
 
 void loop() {
   HttpClient client;
-  client.get("http://api.paraimpu.com/use?token=f33f4e73-6e7b-4c12-83cc-fc8bc023ce7f");
+  client.get("http://api.paraimpu.com/use?token=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
 
   while (client.available()) {
     c = client.read();
