@@ -6,6 +6,9 @@
  modified by Mirco Piccin on April 2014 for ArduinoTour IoT Workshop 
  @ WeMake / Milan
  
+ EDIT: now there is an Arduino Yùn actuator available on Paraimpu
+ http://blog.paraimpu.com/2014/05/arduino-yun.html
+ 
  For more details, please read http://www.gnu.org/licenses/gpl-3.0.txt
 ***************************************************************************/
 #include <Bridge.h>

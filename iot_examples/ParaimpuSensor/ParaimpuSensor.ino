@@ -7,6 +7,9 @@
 
  created by Mirco Piccin on April 2014 for ArduinoTour IoT Workshop 
  @ WeMake / Milan
+ 
+ EDIT: now there is an Arduino Yùn sensor available on Paraimpu
+ http://blog.paraimpu.com/2014/05/arduino-yun.html
  */
  
 #include <TinkerKit.h>
