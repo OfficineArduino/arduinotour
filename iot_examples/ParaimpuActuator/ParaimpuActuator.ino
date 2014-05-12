@@ -3,7 +3,8 @@
  according to the inputs read by actuator instance on Paraimpu.com
 
  Original code by Paraimpu Team ( http://www.paraimpu.com ) released under GPL v3.
- modified by Mirco Piccin
+ modified by Mirco Piccin on April 2014 for ArduinoTour IoT Workshop 
+ @ WeMake / Milan
  
  For more details, please read http://www.gnu.org/licenses/gpl-3.0.txt
 ***************************************************************************/
